@@ -7,18 +7,20 @@ import net.minecraft.world.inventory.Slot;
 
 // just so hotswap works
 public class MixinInjects {
+
     private static Slot currentlyRenderingSlot = null;
+    private static float carriedAnimationProgress = 0f;
 
     public static void preRenderFloatingItem(GuiGraphics gui, int leftPos, int topPos, int mouseX, int mouseY, float partialTicks) {
         PoseStack poseStack = gui.pose();
 
-        TiaMod.carriedAnimationProgress += partialTicks * TiaConfig.animationSpeed;
-        if (TiaMod.carriedAnimationProgress > 1f)
-            TiaMod.carriedAnimationProgress = 1f;
+        carriedAnimationProgress += partialTicks * ModConfigs.animationSpeed;
+        if (carriedAnimationProgress > 1f)
+            carriedAnimationProgress = 1f;
 
         poseStack.translate(-(leftPos - mouseX), -(topPos - mouseY - 4), 0);
 
-        float scale = 1f + (TiaConfig.pickupScale - 1f) * (1 - (float)Math.pow(1 - TiaMod.carriedAnimationProgress, 5));
+        float scale = 1f + (ModConfigs.pickupScale - 1f) * (1 - (float)Math.pow(1 - carriedAnimationProgress, 5));
         poseStack.scale(scale, scale, scale);
 
         poseStack.translate(leftPos - mouseX, topPos - mouseY - 4, 0);
@@ -28,7 +30,7 @@ public class MixinInjects {
         Animated slot = (Animated) pSlot;
 
         float progress = slot.getAnimationProgress();
-        progress -= Minecraft.getInstance().getFrameTime() * TiaConfig.animationSpeed;
+        progress -= Minecraft.getInstance().getTimer().getRealtimeDeltaTicks() * ModConfigs.animationSpeed;
         if (progress < 0f)
             progress = 0f;
 
@@ -36,7 +38,7 @@ public class MixinInjects {
         currentlyRenderingSlot = null;
     }
 
-    public static void preRenderSlotItem(GuiGraphics gui, Slot slot, int leftPos, int topPos) {
+    public static void preRenderSlotItem(Slot slot) {
         currentlyRenderingSlot = slot;
     }
 
@@ -45,13 +47,13 @@ public class MixinInjects {
             return;
 
         Animated slot = (Animated) currentlyRenderingSlot;
-        float scale = 1f + (TiaConfig.pickupScale - 1f) * (1 - (float)Math.pow(1 - slot.getAnimationProgress(), 5));
+        float scale = 1f + (ModConfigs.pickupScale - 1f) * (1 - (float)Math.pow(1 - slot.getAnimationProgress(), 5));
         pose.scale(scale, scale, scale);
     }
 
     public static void onSlotStackedOn(Slot pSlot) {
         Animated slot = (Animated) pSlot;
         slot.setAnimationProgress(1f);
-        TiaMod.carriedAnimationProgress = 0f;
+        carriedAnimationProgress = 0f;
     }
 }

@@ -9,20 +9,15 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class TiaConfig {
+public class FabricConfigs {
+
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("tia.json");
     private static final File CONFIG_FILE = CONFIG_PATH.toFile();
 
-    private static final float defaultAnimationSpeed = 0.5f;
-    private static final float defaultPickupScale = 1.4f;
-
-    public static float animationSpeed = defaultAnimationSpeed;
-    public static float pickupScale = defaultPickupScale;
-
     public static void load() {
         if (!CONFIG_FILE.isFile()) {
-            TiaMod.LOGGER.info("Config file not found, creating one...");
+            Commons.LOGGER.info("Config file not found, creating one...");
 
             try {
                 createDefaultConfigFile();
@@ -34,8 +29,8 @@ public class TiaConfig {
 
         try {
             JsonObject config = GSON.fromJson(Files.readString(CONFIG_PATH), JsonObject.class);
-            animationSpeed = config.get("animation_speed").getAsFloat();
-            pickupScale = config.get("pickup_scale").getAsFloat();
+            ModConfigs.animationSpeed = config.get("animation_speed").getAsFloat();
+            ModConfigs.pickupScale = config.get("pickup_scale").getAsFloat();
         } catch (IOException e) {
             logError("Could not read config file", e);
         } catch (NullPointerException e) {
@@ -45,8 +40,8 @@ public class TiaConfig {
 
     private static void createDefaultConfigFile() throws IOException {
         JsonObject config = new JsonObject();
-        config.addProperty("animation_speed", defaultAnimationSpeed);
-        config.addProperty("pickup_scale", defaultPickupScale);
+        config.addProperty("animation_speed", ModConfigs.getDefaultAnimationSpeed());
+        config.addProperty("pickup_scale", ModConfigs.getDefaultPickupScale());
 
         BufferedWriter writer = new BufferedWriter(new FileWriter(CONFIG_FILE, false));
         writer.write(GSON.toJson(config));
@@ -54,7 +49,7 @@ public class TiaConfig {
     }
 
     private static void logError(String message, Exception exception) {
-        TiaMod.LOGGER.error(message + ": " + exception.getMessage());
-        TiaMod.LOGGER.error("Using default values instead");
+        Commons.LOGGER.error(message + ": " + exception.getMessage());
+        Commons.LOGGER.error("Using default values instead");
     }
 }
