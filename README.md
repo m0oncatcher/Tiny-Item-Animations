@@ -6,7 +6,9 @@ This mod is client-side, and supports NeoForge and Fabric (and likely Quilt, but
 
 ## Installation
 
-Grab the mod from [CurseForge](https://www.curseforge.com/minecraft/mc-mods/tiny-item-animations) or [Modrinth](https://modrinth.com/mod/tiny-item-animations).
+Grab the mod from [Modrinth](https://modrinth.com/mod/tiny-item-animations).
+
+You are not allowed to re-upload this mod to any platform without explicit permission.
 
 ## Issues
 
