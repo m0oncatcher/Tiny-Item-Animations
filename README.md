@@ -8,7 +8,7 @@ This mod is client-side, and supports NeoForge and Fabric (and likely Quilt, but
 
 Grab the mod from [Modrinth](https://modrinth.com/mod/tiny-item-animations).
 
-You are not allowed to re-upload this mod to any platform without explicit permission.
+You are [not allowed](https://github.com/Trivaxy/Tiny-Item-Animations/blob/multiloader-1.21/LICENSE) to re-upload this mod to any platform without explicit permission.
 
 ## Issues
 
